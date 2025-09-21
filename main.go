@@ -17,10 +17,6 @@ import (
 	"github.com/zh-five/xdaemon"
 )
 
-//	vtysh -c "configure terminal" \
-//	    -c "router bgp 65001" \
-//		-c "address-family ipv4 unicast" \
-//		-c "network $ROUTE_PREFIX"
 func addFrrRoute(ip string, asn string) error {
 	// 构建vtysh命令
 	cmd := fmt.Sprintf(`vtysh -c "configure terminal" \
