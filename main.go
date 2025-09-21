@@ -19,7 +19,7 @@ func main() {
 		ipRange = flag.String("r", "", "IP range to filter (e.g., 192.168.1.0/24)")
 		snaplen = flag.Int("s", 65536, "Snapshot length")
 		promisc = flag.Bool("p", false, "Promiscuous mode")
-		filter  = flag.String("f", "", "BPF filter")
+		filter  = flag.String("f", "inbound", "BPF filter")
 	)
 	flag.Parse()
 
@@ -92,11 +92,8 @@ func main() {
 	go func() {
 		ticker := time.NewTicker(5 * time.Second)
 		defer ticker.Stop()
-		for {
-			select {
-			case <-ticker.C:
-				printAndCleanCache()
-			}
+		for range ticker.C {
+			printAndCleanCache()
 		}
 	}()
 
