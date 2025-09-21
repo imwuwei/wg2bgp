@@ -14,6 +14,7 @@ import (
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/pcap"
+	"github.com/zh-five/xdaemon"
 )
 
 //	vtysh -c "configure terminal" \
@@ -82,8 +83,20 @@ func main() {
 		promisc = flag.Bool("p", false, "Promiscuous mode")
 		filter  = flag.String("f", "inbound", "BPF filter")
 		asn     = flag.String("a", "64514", "ASN")
+		daemon  = flag.Bool("d", false, "Run as a daemon")
 	)
 	flag.Parse()
+
+	//启动守护进程
+	if *daemon {
+		//创建一个Daemon对象
+		logFile := "/var/log/wg2bgp.log"
+		daemon := xdaemon.NewDaemon(logFile)
+		//调整一些运行参数(可选)
+		daemon.MaxCount = 2 //最大重启次数
+		//执行守护进程模式
+		daemon.Run()
+	}
 
 	// 捕获退出信号
 	sigChan := make(chan os.Signal, 1)
